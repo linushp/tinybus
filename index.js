@@ -37,10 +37,22 @@ TinyBusPrototype.off = function (eventName, listener) {
     var result = [];
     for (var i = 0; i < listeners.length; i++) {
         var m = listeners[i];
-        if (m.eventName === eventName && m.listener === listener) {
-            //skip
-        } else {
-            result.push(m);
+        if (!listener){
+
+            if (m.eventName === eventName) {
+                //skip
+            } else {
+                result.push(m);
+            }
+
+        }else {
+
+            if (m.eventName === eventName && m.listener === listener) {
+                //skip
+            } else {
+                result.push(m);
+            }
+
         }
     }
     that[PRIVATE_LISTENERS_NAME] = result;
@@ -62,6 +74,11 @@ TinyBusPrototype.emit = function (eventName, m1, m2, m3, m4, m5) {
             }
         }
     }
+};
+
+
+TinyBusPrototype.clearAllListeners = function () {
+    this[PRIVATE_LISTENERS_NAME] = [];
 };
 
 
