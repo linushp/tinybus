@@ -1,10 +1,3 @@
-# tinybus
-
-极小的js事件总线
-
-
-```typescript
-
 declare class TinyBus {
     public constructor(name?: string, listenerWrapper?: Function);
 
@@ -15,5 +8,4 @@ declare class TinyBus {
     public emit: (eventName: string, m1?: any, m2?: any, m3?: any, m4?: any, m5?: any) => void;
 }
 
-
-```
+export default TinyBus;
