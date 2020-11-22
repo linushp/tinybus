@@ -18,6 +18,26 @@ TinyBusPrototype.on = function (eventName, listener) {
     });
 };
 
+
+function argumentsToArray(args){
+    return Array.prototype.slice.apply(args);
+}
+
+TinyBusPrototype.once = function (eventName, listener) {
+
+    var listener1 = function () {
+        var args = argumentsToArray(arguments);
+        listener.apply(this, args);
+        this.off(eventName, listener1);
+    };
+
+    this[PRIVATE_LISTENERS_NAME].push({
+        eventName: eventName,
+        listener: listener1
+    });
+};
+
+
 TinyBusPrototype.setOn = function (eventName, listener) {
     var listenerObjList = this[PRIVATE_LISTENERS_NAME];
     for (var i = 0; i < listenerObjList.length; i++) {
@@ -63,17 +83,24 @@ TinyBusPrototype.emit = function (eventName, m1, m2, m3, m4, m5) {
     var that = this;
     var listeners = that[PRIVATE_LISTENERS_NAME];
     var listenerWrapper = that[PRIVATE_LISTENER_WRAPPER];
-
+    var result = [];
     for (var i = 0; i < listeners.length; i++) {
         var m = listeners[i];
         if (m.eventName === eventName && m.listener) {
+            var res;
             if (listenerWrapper) {
-                listenerWrapper(m.listener, m1, m2, m3, m4, m5);
+                res = listenerWrapper(m.listener, m1, m2, m3, m4, m5);
             } else {
-                m.listener(m1, m2, m3, m4, m5);
+                res = m.listener(m1, m2, m3, m4, m5);
+            }
+
+            if (res !== undefined) {
+                result.push(res);
             }
         }
     }
+
+    return result;
 };
 
 

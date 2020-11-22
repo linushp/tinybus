@@ -1,6 +1,6 @@
 # tinybus
 
-极小的js事件总线
+极小的js事件总线, 没有任何其他依赖
 
 
 ```typescript
